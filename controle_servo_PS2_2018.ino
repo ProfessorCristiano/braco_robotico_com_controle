@@ -1,15 +1,21 @@
-#include <PS2X_lib.h> //for v1.6
-//#include <Servo.h>
-#include <VarSpeedServo.h>
-PS2X ps2x; // create PS2 Controller Class
-VarSpeedServo Garra;
-VarSpeedServo Altura;
-VarSpeedServo Base;
-VarSpeedServo Braco;
+#include <PS2X_lib.h>      // Bibioteca para receber controles do Joystick PS2
+#include <VarSpeedServo.h> // Biblioteca para mover o servo motor com controle de velocidade subistitui o "#include <Servo.h>" Fonte: https://github.com/filipeflop/VarSpeedServo & mais atualizado em: https://github.com/netlabtoolkit/VarSpeedServo
+PS2X ps2x;                 // cria a classe para operar o controle segundo a Biblioteca
+VarSpeedServo Garra;       // cria a classe para operar o servo da Garra
+VarSpeedServo Altura;      // cria a classe para operar o servo da Altura
+VarSpeedServo Base;        // cria a classe para operar o servo da Base
+VarSpeedServo Braco;       // cria a classe para operar o servo do Braço
 
 
-static int vgarra=67,vbraco=60,vbase=90,valtura=90;
-static int pgarra=90,paltura=90,pbase=90,pbraco=60;
+static int vgarra=67,vbraco=60,vbase=90,valtura=90; // Cria as variáveis estáticas para receber a posição do analógico do controle
+static int pgarra=90,paltura=90,pbase=90,pbraco=60; // Cria as variáveis estáticas para informar a posição para os Servos 
+
+//////////////////////////////////////////////////////////////////////////////////////
+// OBS: Variáveis estáticas não são reiniciadas no final do loop                    //
+//      O normal é sempre que o loop reinicia as variáveis são reiniciadas          //
+//  Sem isso o braço não ficaria parado em um mesmo lugar,Dependendo diretamente    //
+//  do valor lido no momento pelo direcional analógico                              //
+//////////////////////////////////////////////////////////////////////////////////////
 
 static bool tipo=0;
 int tmp = 50;
@@ -24,10 +30,10 @@ byte vibrate = 0;
 //////////////////////////////////////////////
 void setup() {
   
-  Braco.attach(9);
-  Garra.attach(6);
-  Altura.attach(3);
-  Base.attach(5);
+  Braco.attach(9); 	//Inicializa o Servo Braco no pino 9 do arduino
+  Garra.attach(6); 	//Inicializa o Servo Garra no pino 6 do arduino
+  Altura.attach(3);	//Inicializa o Servo Altura no pino 3 do arduino
+  Base.attach(5);	//Inicializa o Servo Base no pino 5 do arduino
 
   Garra.slowmove(pgarra,vel);
   Altura.slowmove(paltura,vel);
