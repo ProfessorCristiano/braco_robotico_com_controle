@@ -7,7 +7,7 @@ VarSpeedServo Base;        // cria a classe para operar o servo da Base
 VarSpeedServo Braco;       // cria a classe para operar o servo do Braço
 
 static int vgarra=60,vbraco=60,vbase=60,valtura=60; // Cria as variáveis estáticas para receber a posição do analógico do controle
-static int pgarra=50,paltura=1,pbase=82,pbraco=95; // Cria as variáveis estáticas para informar a posição para os Servos 
+static int pgarra=60,paltura=1,pbase=82,pbraco=95; // Cria as variáveis estáticas para informar a posição para os Servos 
 
 //////////////////////////////////////////////////////////////////////////////////////
 // OBS: Variáveis estáticas não são reiniciadas no final do loop                    //
@@ -48,9 +48,6 @@ void setup() {
 ////////////////////////////////////////////////
 
 
-
-
-
 //////////////////////////////////////////////
 /////////////////PRINCIPAL////////////////////
 //////////////////////////////////////////////
@@ -66,14 +63,16 @@ void loop() {
 if(ps2x.ButtonReleased(PSB_BLUE))  
   {
     Serial.println("BOTÃO X AZUL PRESSIONADO");
-    Garra.slowmove(cont,45);
+    pgarra=46;
+    Garra.slowmove(cont,pgarra);
     delay(tmp);
   }
 //////
   if(ps2x.ButtonReleased(PSB_GREEN))  
   {
     Serial.println("BOTÃO /\ VERDE PRESSIONADO");
-    Garra.slowmove(cont,70);
+    pgarra=75;
+    Garra.slowmove(cont,pgarra)
     delay(tmp);
   }
 //////  
@@ -92,8 +91,8 @@ if(ps2x.ButtonReleased(PSB_BLUE))
  if(ps2x.Button(PSB_START))
  {         
     Serial.println("Start PRESSIONADO");
-    vgarra=67;vbraco=60;vbase=90;valtura=90;
-    pgarra=70;paltura=20;pbase=80;pbraco=90;
+    vgarra=60;vbraco=60;vbase=60;valtura=60;
+    pgarra=60;paltura=1;pbase=82;pbraco=95;
 
 	Garra.slowmove(pgarra,vel);
 	Altura.slowmove(paltura,vel);
@@ -131,7 +130,7 @@ if(ps2x.ButtonReleased(PSB_BLUE))
     if(ps2x.Button(PSB_L3))
     {  
 		Serial.println("L3 pressed");
-		Oia();
+		Pinca();
 	}
 	if(ps2x.Button(PSB_R3))
     {  	
@@ -141,66 +140,66 @@ if(ps2x.ButtonReleased(PSB_BLUE))
 	if(ps2x.Button(PSB_L2))
     {
 		Serial.println("L2 pressed");
-		Nega();
+		paltura=paltura+1;
 	}
     if(ps2x.Button(PSB_R2))
     {
       Serial.println("R2 pressed");
-	  paltura=paltura-1;
+	  pgarra=pgarra+1;;
     }
     if(ps2x.Button(PSB_L1))
     {
 		Serial.println("L1 pressed");
-		Confirma();
+		paltura=paltura-1;
 	}
 	if(ps2x.Button(PSB_R1))
     {
       Serial.println("R1 pressed"); 
-	  paltura=paltura+1;
+	  pgarra=pgarra-1;
     }
 //// 
-vgarra=map(ps2x.Analog(PSS_RX), 0, 255, 0, 255);
-valtura=map(ps2x.Analog(PSS_RY), 0, 255, 0, 255);
-vbase=map(ps2x.Analog(PSS_LX), 0, 255, 0, 255);
-vbraco=map(ps2x.Analog(PSS_LY), 0, 255, 0, 255);
+vgarra=map(ps2x.Analog(PSS_RX), 0, 255, 0, 128);
+valtura=map(ps2x.Analog(PSS_RY), 0, 255, 0, 128);
+vbase=map(ps2x.Analog(PSS_LX), 0, 255, 0, 128);
+vbraco=map(ps2x.Analog(PSS_LY), 0, 255, 0, 128);
 /////
 
-if (vgarra>190)
+if (vgarra>74)
   pgarra=pgarra+1;
-if (vgarra<170)
+if (vgarra<54)
   pgarra=pgarra-1;
-if (valtura>190)
+if (valtura>74)
   paltura=paltura+1;
-if (valtura<170)
+if (valtura<54)
   paltura=paltura-1;
-if (vbase>190)
+if (vbase>74)
   pbase=pbase-1;
-if (vbase<170)
+if (vbase<54)
   pbase=pbase+1;
-if (vbraco>190)
+if (vbraco>74)
   pbraco=pbraco+1;
-if (vbraco<170)
+if (vbraco<54)
   pbraco=pbraco-1;  
 
 	delay(tmp);
 
 //clausula de segurança para evitar ficar travando//
 //valor positivo
-if (pgarra>89){
-   pgarra=89;
+if (pgarra>80){
+   pgarra=80;
    delay(tmp);}
 if (paltura>89){
-   paltura=89;
+   paltura=90;
    delay(tmp);}
-if (pbase>189){
-   pgarra=189;
+if (pbase>179){
+   pgarra=180;
    delay(tmp);}
 if (pbraco>120){
    pbraco=120;
    delay(tmp);} 
 ///valor negativo
-if (pgarra<45){
-   pgarra=45;
+if (pgarra<46){
+   pgarra=46;
    delay(tmp);}
 if (paltura<1){
    paltura=1;
@@ -284,19 +283,19 @@ void Pinca()
 
 void sequenciaB()
 {
-  tmp=800;
+  tmp=1000;
   //pegaB(); 
   Garra.slowmove(70,vel);
   delay(tmp);
-  Braco.slowmove(90,vel);
+  Braco.slowmove(110,vel);
   delay(tmp);
-  Base.slowmove(39,vel);
+  Base.slowmove(41,vel);
   delay(tmp);
   Altura.slowmove(90,vel);
   delay(tmp);
-  Braco.slowmove(55,vel);
+  Braco.slowmove(53,vel);
   delay(tmp);
-  Garra.slowmove(45,vel);
+  Garra.slowmove(47,vel);
   delay(2000);
   
   retorno();
@@ -318,7 +317,7 @@ void sequenciaB()
 
 void sequenciaA()
 {
- tmp=800;
+ tmp=1000;
   //pegaA();
   Garra.slowmove(70,vel);  
   delay(tmp);
@@ -328,7 +327,7 @@ void sequenciaA()
   delay(tmp);
   Braco.slowmove(38,vel);
   delay(tmp);
-  Garra.slowmove(45,vel);  
+  Garra.slowmove(47,vel);  
   delay(2000);
  
   retorno();
@@ -354,6 +353,10 @@ void Manual()
 {
   
 Serial.println("Movimentação manual em andamento");
+ Garra.slowmove(map(ps2x.Analog(PSS_RX), 0, 255, 0, 128),20);
+ Altura.slowmove(map(ps2x.Analog(PSS_RY), 0, 255, 0, 128),20);
+ Base.slowmove(map(ps2x.Analog(PSS_LX), 0, 255, 0, 128),20);
+ Braco.slowmove(map(ps2x.Analog(PSS_LY), 0, 255, 0, 128),20);	
 }
 
 void printposicao()
